@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+{% load widget_tweaks %}
+{% block content %}
+
+<div class="hero-body">
+    <div class="container has-text-centered">
+        <div class="columns">
+        
+            <div class="column is-6 is-offset-3">
+                <h1 class="title">
+                    MakersLog Backup You in PH
+                </h1>
+                <h2 class="subtitle">
+                    $this is the best software platform for running an internet business. We handle billions of dollars every year for forward-thinking businesses around the world.
+                </h2>
+                <div class="box">
+                    <form method="POST" action="">
+
+                        <div class="field is-grouped">
+                            <p class="control is-expanded">
+                                {{form.url|attr:"class:input"|attr:"placeholder:Enter your website url"}}
+                                {{form.url.errors}}
+                            </p>
+                            <p class="control">
+                                <button class="button is-info" type="submit">
+                                    Notify Me
+                                </button>
+                            </p>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="columns">
+            <div class="column is-6 is-offset-3">
+
+{% if votes %} 
+
+    {{votes|length}}
+    {% for v in votes %}
+    <div>
+    
+        @{{v.username}} {{v.name}} <img src="{{v.image}}" alt="">
+    </div>
+    {% endfor %}
+
+{% endif %}
+            
+{% if result %}
+    
+    {% for res in result %}
+        <article class="media">
+            <figure class="media-left">
+                <img src="{{res.thumbnail}}" alt="" class="image is-128x128">
+            </figure>
+            <div class="media-contente">
+                <div class="content">
+                    <p>
+                    <a href="?id={{res.id}}">
+                        {{res.name}}
+                    </a>
+                    </p>
+                </div>
+            
+            </div>
+        </article>
+    {% endfor %}
+
+{% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% endblock content %}
