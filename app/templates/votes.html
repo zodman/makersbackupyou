@@ -39,10 +39,10 @@
 
 {% if status != "finished" %}
     
-<div>
+<div class="is-size-7 has-text-grey-lighter	">
 
     {% for q in stat.queues  %}
-        People on queue: {{q.jobs|pprint}}
+        People on queue: {{q.jobs}} active: {{q.started_jobs}}
     {% endfor %}
 
 </div>
