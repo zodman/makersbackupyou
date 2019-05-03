@@ -1,0 +1,23 @@
+
+{% if request.session.jobs|length > 0 %}
+              <i id="demo-spinner" class="fa fa-spinner fa-spin"></i>
+{% endif %}
+
+{% if votes %}
+
+<div>
+    {{votes.result|length}} out of {{votes.total}} upvoters are from Makerlog.
+</div>
+
+<div>
+    
+    {% for v in votes.result %}
+         <img src="{{v.image}}" alt="">
+
+    <!--<div>-->
+        <!--@{{v.username}} {{v.name}} <img src="{{v.image}}" alt="">-->
+    <!--</div>-->
+    {% endfor %}
+
+</div>
+{% endif %}

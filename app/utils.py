@@ -11,8 +11,7 @@ def check_maker(username):
         return True
     return False
 
-
-def votes(id):
+def votes(id,uid):
     l = []
     page = 1
     count = 0
@@ -33,12 +32,11 @@ def votes(id):
             count += 1
     return count, l
 
-import pprint
-def search(url_search):
+def search(url_search, uid):
     import re
-    
     content = requests.get(url_search).text
     resp = re.search('producthunt\:\/\/post\/(?P<id>[0-9]+)', content)
     if resp:
         id =  resp.groupdict().get("id")
-        return id 
+        if id:
+            return votes(id, uid)

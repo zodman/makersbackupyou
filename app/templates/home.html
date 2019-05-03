@@ -2,30 +2,36 @@
 {% load widget_tweaks %}
 {% block content %}
 
+<div class="hero is-large is-primary is-bold">
+
+
 <div class="hero-body">
     <div class="container has-text-centered">
         <div class="columns">
         
             <div class="column is-6 is-offset-3">
                 <h1 class="title">
-                    GetMakerLog Backup You in PH
+                   MAKERLOG GOT YOUR BACK
                 </h1>
                 <h2 class="subtitle">
-                Did you how many budies backupyou in PH ? 
-                </h2>
+Do you know how many buddies back you up on ProductHunt?                </h2>
                 <div class="box">
                     <form method="POST" action="">
-
                         <div class="field is-grouped">
-                            <p class="control is-expanded">
-                                {{form.url|attr:"class:input"|attr:"placeholder:Enter your website url"}}
-                                {{form.url.errors}}
-                            </p>
+                            <div class="control is-expanded">
+                              {{form.url|attr:"class:input"|attr:"placeholder:Enter your website product hunt url"}}
+                                
+                                                        <div class="is-clearfix help is-danger">    
+                                 {{form.url.errors}}
+                            </div>
+                                
+                            </div>
                             <p class="control">
-                                <button class="button is-info" type="submit">
+                                <button class="button is-primary">
                                     Show me
                                 </button>
                             </p>
+
                         </div>
                     </form>
                 </div>
@@ -33,56 +39,13 @@
         </div>
         <div class="columns">
             <div class="column is-6 is-offset-3">
-
-
-{% if error %}
-    {{error}}
-{% endif %}
-
-{% if votes %} 
-
-<div>
-    {{votes.result|length}} of {{votes.total}} are from GetMakerlog.com  community
-</div>
-
-<div>
-    
-    {% for v in votes.result %}
-         <img src="{{v.image}}" alt="">
-
-    <!--<div>-->
-        <!--@{{v.username}} {{v.name}} <img src="{{v.image}}" alt="">-->
-    <!--</div>-->
-    {% endfor %}
-
-</div>
-{% endif %}
-            
-{% if result %}
-    
-    {% for res in result %}
-        <article class="media">
-            <figure class="media-left">
-                <img src="{{res.thumbnail}}" alt="" class="image is-128x128">
-            </figure>
-            <div class="media-contente">
-                <div class="content">
-                    <p>
-                    <a href="?id={{res.id}}">
-                        {{res.name}}
-                    </a>
-                    </p>
-                </div>
-            
+            <div id="votes" ic-poll="2s" ic-src="{% url 'status' %}">  
+                {% include "votes.html" %}            
             </div>
-        </article>
-    {% endfor %}
-
-{% endif %}
             </div>
         </div>
     </div>
 </div>
 
-
+</div>
 {% endblock content %}
