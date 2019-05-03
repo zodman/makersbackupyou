@@ -27,7 +27,7 @@ RQ_QUEUES = {
         'DEFAULT_TIMEOUT': 50000,
     }
 }
-
+SESSION_ENGINE= "django.contrib.sessions.backends.signed_cookies" 
 configure(locals(), django_admin=True)
 from django.views.decorators.cache import cache_page
 
@@ -44,12 +44,28 @@ class FUrl(forms.Form):
 @route("status", name="status")
 def status(request):
     import rq
+    from django_rq.utils import get_statistics
     import redis
     job_id = request.session.get("job")
+    context = {}
+    status = ""
     if job_id:
-        job = rq.Job.fetch(job_id, connection=redis.Redis())
-        print(job.get_status())
-    return render(request, "votes.html", {})
+        try:
+            job = rq.job.Job.fetch(job_id, connection=redis.Redis())
+            status = job.get_status()
+            context["url"] = job.args[0]
+        except rq.exceptions.NoSuchJobError:
+            pass
+
+        context["status"] = status
+        percent = cache.get(request.session.get("uid", 0))
+        context["percent"] = percent
+        if status == "finished":
+            res = job.result
+            context["votes"]  = dict(total=res[0], result=res[1])
+
+    context["stat"] = get_statistics()
+    return render(request, "votes.html", context)
 
 
 @route('', name='home')
@@ -60,9 +76,11 @@ def homepage(request):
         f = FUrl(request.POST)
         context["form"] = f
         if f.is_valid():
-            url  = f.cleaned_data.get("url")
-            uid = uuid.uuid4()
+            url = f.cleaned_data.get("url")
+            uid = str(uuid.uuid4())
+            cache.set(uid, 0)
             job = django_rq.enqueue(search_url, url, uid)
+            request.session["uid"] = uid
             request.session["job"] = job.get_id()
     return render(request, "home.html", context)
 

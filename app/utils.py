@@ -1,4 +1,5 @@
 import requests
+from django.core.cache import cache
 
 h = {
     "Authorization": "Bearer 7112d23e618e967f9475ce6d28a391e50d7ff6924bec1c400ae9a13122d6eede"
@@ -11,10 +12,19 @@ def check_maker(username):
         return True
     return False
 
+def post_vote_count(id):
+    url = "https://api.producthunt.com/v1/posts/{}"
+    r = requests.get(url.format(id), headers=h)
+    return r.json().get("post").get("votes_count")
+
+
 def votes(id,uid):
     l = []
     page = 1
     count = 0
+    cache.set(uid, 10)
+    percent_total = post_vote_count(id)
+    cache.set(uid, 20)
     while True:
         url = "https://api.producthunt.com/v1/posts/{}/votes?page={}"
         r = requests.get(url.format(id,page), headers=h)
@@ -30,12 +40,15 @@ def votes(id,uid):
             if is_maker:
                 l.append(dict(username=username, image=image, name=name, is_maker=is_maker))
             count += 1
+            cache.set(uid, count/percent_total*80)
     return count, l
 
 def search(url_search, uid):
     import re
+    cache.set(uid, 1)
     content = requests.get(url_search).text
     resp = re.search('producthunt\:\/\/post\/(?P<id>[0-9]+)', content)
+    cache.set(uid, 5)
     if resp:
         id =  resp.groupdict().get("id")
         if id:

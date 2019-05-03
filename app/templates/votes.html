@@ -1,11 +1,24 @@
+{% if status %}
 
-{% if request.session.jobs|length > 0 %}
-              <i id="demo-spinner" class="fa fa-spinner fa-spin"></i>
+<div>
+<progress class="progress" {% if percent > 0 %} value="{{percent|floatformat:0}}" {% endif %} max="100">
+{{percent|floatformat:0}} %
+</progress>
+{{percent|floatformat:0}} %
+</div>
+   {% if status != "started" %}
+   {{status}}
+   {% endif %} 
+{{url}}  <i id="demo-spinner" class="fa fa-spinner fa-spin" ></i>    
 {% endif %}
 
 {% if votes %}
 
 <div>
+    <p>
+        {{url}}
+    </p>
+
     {{votes.result|length}} out of {{votes.total}} upvoters are from Makerlog.
 </div>
 
@@ -20,4 +33,16 @@
     {% endfor %}
 
 </div>
+
+
 {% endif %}
+
+
+
+<div>
+
+    {% for q in stat.queues  %}
+        People on queue: {{q.jobs|pprint}}
+    {% endfor %}
+
+</div>
