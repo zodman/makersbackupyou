@@ -28,6 +28,7 @@ RQ_QUEUES = {
     }
 }
 SESSION_ENGINE= "django.contrib.sessions.backends.signed_cookies" 
+ALLOWED_HOSTS=["*"]
 configure(locals(), django_admin=True)
 from django.views.decorators.cache import cache_page
 
