@@ -38,11 +38,12 @@
 {% endif %}
 
 {% if status != "finished" %}
-    
+
+
 <div class="is-size-7 has-text-grey-lighter	">
 
     {% for q in stat.queues  %}
-        People on queue: {{q.jobs}} active: {{q.started_jobs}}
+     <i title="queue" class="far fa-clock"></i> {{q.jobs}}  <i title="active" class="fas fa-users"></i> {{q.started_jobs}} <i title="workers" class="fas fa-cog"></i> {{q.workers}}
     {% endfor %}
 
 </div>
