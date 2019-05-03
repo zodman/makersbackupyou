@@ -11,7 +11,7 @@
         
             <div class="column is-6 is-offset-3">
                 <h1 class="title">
-                   MAKERLOG GOT YOUR BACK
+                   Makerlog got your back
                 </h1>
                 <h2 class="subtitle">
 Do you know how many buddies back you up on ProductHunt?                </h2>
@@ -23,6 +23,9 @@ Do you know how many buddies back you up on ProductHunt?                </h2>
                                 
                                                         <div class="is-clearfix help is-danger">    
                                  {{form.url.errors}}
+                                 {% if msg %}
+                                 <p class="help is-success">{{msg}}</p>
+                                 {% endif %}
                             </div>
                                 
                             </div>

@@ -83,6 +83,7 @@ def homepage(request):
             job = django_rq.enqueue(search_url, url, uid)
             request.session["uid"] = uid
             request.session["job"] = job.get_id()
+            context["msg"] = "url submited"
     return render(request, "home.html", context)
 
 
