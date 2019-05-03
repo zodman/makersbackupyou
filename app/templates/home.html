@@ -5,50 +5,52 @@
 <div class="hero is-large is-primary is-bold">
 
 
-<div class="hero-body">
-    <div class="container has-text-centered">
-        <div class="columns">
-        
-            <div class="column is-6 is-offset-3">
-                <h1 class="title">
-                   Makerlog got your back
-                </h1>
-                <h2 class="subtitle">
-Do you know how many buddies back you up on ProductHunt?                </h2>
-                <div class="box">
-                    <form method="POST" action="">
-                        <div class="field is-grouped">
-                            <div class="control is-expanded">
-                              {{form.url|attr:"class:input"|attr:"placeholder:Enter your website product hunt url"}}
-                                
-                                                        <div class="is-clearfix help is-danger">    
-                                 {{form.url.errors}}
-                                 {% if msg %}
-                                 <p class="help is-success">{{msg}}</p>
-                                 {% endif %}
-                            </div>
-                                
-                            </div>
-                            <p class="control">
-                                <button class="button is-primary">
-                                    Show me
-                                </button>
-                            </p>
+    <div class="hero-body">
+        <div class="container has-text-centered">
+            <div class="columns">
+            
+                <div class="column is-6 is-offset-3">
+                    <h1 class="title">
+                       Makerlog got your back
+                    </h1>
+                    <h2 class="subtitle">
+    Do you know how many buddies back you up on ProductHunt?                </h2>
+                    <div class="box">
+                        <form method="POST" action="">
+                            <div class="field is-grouped">
+                                <div class="control is-expanded">
+                                  {{form.url|attr:"class:input"|attr:"placeholder:Enter your website product hunt url"}}
+                                    
+                                                            <div class="is-clearfix help is-danger">    
+                                     {{form.url.errors}}
+                                     {% if msg %}
+                                     <p class="help is-success">{{msg}}</p>
+                                     {% endif %}
+                                </div>
+                                    
+                                </div>
+                                <p class="control">
+                                    <button class="button is-primary">
+                                        Show me
+                                    </button>
+                                </p>
 
-                        </div>
-                    </form>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="columns">
+                <div class="column is-6 is-offset-3">
+                <div id="votes" ic-poll="2s" ic-src="{% url 'status' %}">  
+                    {% include "votes.html" %}            
+                </div>
                 </div>
             </div>
         </div>
-        <div class="columns">
-            <div class="column is-6 is-offset-3">
-            <div id="votes" ic-poll="2s" ic-src="{% url 'status' %}">  
-                {% include "votes.html" %}            
-            </div>
-            </div>
-        </div>
     </div>
-</div>
-
+    <div class="hero-foot has-text-centered">
+        made with <i class="fa fa-heart"></i> by <a href="https://twitter.com/zodman">@zodman</a> 
+    </div>
 </div>
 {% endblock content %}
