@@ -22,9 +22,7 @@ def votes(id,uid):
     l = []
     page = 1
     count = 0
-    cache.set(uid, 10)
     percent_total = post_vote_count(id)
-    cache.set(uid, 20)
     while True:
         url = "https://api.producthunt.com/v1/posts/{}/votes?page={}"
         r = requests.get(url.format(id,page), headers=h)
@@ -40,15 +38,13 @@ def votes(id,uid):
             if is_maker:
                 l.append(dict(username=username, image=image, name=name, is_maker=is_maker))
             count += 1
-            cache.set(uid, count/percent_total*80)
+            cache.set(uid, count/percent_total*100)
     return count, l
 
 def search(url_search, uid):
     import re
-    cache.set(uid, 1)
     content = requests.get(url_search).text
     resp = re.search('producthunt\:\/\/post\/(?P<id>[0-9]+)', content)
-    cache.set(uid, 5)
     if resp:
         id =  resp.groupdict().get("id")
         if id:

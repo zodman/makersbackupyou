@@ -1,4 +1,4 @@
-{% if status %}
+{% if status and  status != "finished" %}
 
 <div>
 <progress class="progress" {% if percent > 0 %} value="{{percent|floatformat:0}}" {% endif %} max="100">
@@ -37,8 +37,8 @@
 
 {% endif %}
 
-
-
+{% if status != "finished" %}
+    
 <div>
 
     {% for q in stat.queues  %}
@@ -46,3 +46,4 @@
     {% endfor %}
 
 </div>
+{% endif %}
