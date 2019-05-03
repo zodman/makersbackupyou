@@ -47,7 +47,7 @@ def status(request):
     from django_rq.utils import get_statistics
     import redis
     job_id = request.session.get("job")
-    context = {}
+    context = {'percent': 0}
     status = ""
     if job_id:
         try:

@@ -1,10 +1,10 @@
-{% if status and  status != "finished" %}
+{% if percent > 0 and status and  status != "finished" %}
 
 <div>
-<progress class="progress" {% if percent > 0 %} value="{{percent|floatformat:0}}" {% endif %} max="100">
-{{percent|floatformat:0}} %
-</progress>
-{{percent|floatformat:0}} %
+    <progress class="progress" {% if percent > 0 %} value="{{percent|floatformat:0}}" {% endif %} max="100">
+    {{percent|floatformat:0}} %
+    </progress>
+    {{percent|floatformat:0}} %
 </div>
    {% if status != "started" %}
    {{status}}
