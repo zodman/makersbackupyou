@@ -3,3 +3,5 @@ django-micro==1.7.2
 django-widget-tweaks==1.4.3
 requests==2.21.0
 django-rq
+python3-memcached
+redis
