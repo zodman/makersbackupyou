@@ -5,3 +5,4 @@ requests==2.21.0
 django-rq
 python3-memcached
 redis
+memorised

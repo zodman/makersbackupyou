@@ -14,7 +14,9 @@ DEBUG = True
 INSTALLED_APPS= [ "widget_tweaks","django_rq"]
 CACHES = {
     'default': {
-        'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
+       'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
+        #'BACKEND': 'django.core.cache.backends.dummy.DummyCache',
+
         'LOCATION': '127.0.0.1:11211',
     }
 }
@@ -59,6 +61,7 @@ def status(request):
             pass
         context["status"] = status
         percent = cache.get(request.session.get("uid", 0))
+        print((request.session.get("uid"), percent))
         context["percent"] = percent
         if status == "finished":
             res = job.result

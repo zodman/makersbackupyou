@@ -1,36 +1,50 @@
 import requests
 from django.core.cache import cache
+from memorised.decorators import memorise
+import logging
+
+log = logging.getLogger(__name__)
 
 h = {
     "Authorization": "Bearer 7112d23e618e967f9475ce6d28a391e50d7ff6924bec1c400ae9a13122d6eede"
 }
 
+def _fetch_all_users():
+    
+    is_fetch = cache.get("::fetch..")
+    if is_fetch is None:
+        print(">>> fetch")
+        url = "https://api.getmakerlog.com/users/?limit=5000"
+        r = requests.get(url)
+        json_r = r.json()
+        cache.set("::fetch..", json_r)
+        return json_r
+    else:
+        return is_fetch
+
+
 def check_maker(username):
-    exists = cache.get("m::{}".format(username))
-    if exists is None:
-    
-        url = "https://api.getmakerlog.com/users/{}/"
-        r = requests.get(url.format(username))
-        flag = False
-        if r.status_code == requests.codes.ok:
-            flag = True
-        cache.set("m::{}".format(username), flag, timeout=60*60*24*7)
-        return flag
-    else:
-        return exists
-    
+    r = _fetch_all_users()
+    for i in r.get("results"):
+        if i.get("username") == username \
+            or i.get("product_hunt_handle") == username:
+            return True
+    return False
+
+@memorise(ttl=60*30)
 def post_vote_count(id):
-    exists = cache.get("m::{}".format(id))
-    if exists is None:
-        url = "https://api.producthunt.com/v1/posts/{}"
-        r = requests.get(url.format(id), headers=h)
-        resp = r.json().get("post").get("votes_count")
-        cache.get("m::{}".format(id), resp)
-        return resp
-    else:
-        return exists
+    print("...posts")
+    url = "https://api.producthunt.com/v1/posts/{}"
+    r = requests.get(url.format(id), headers=h)
+    resp = r.json().get("post").get("votes_count")
+    return resp
 
-
+@memorise(ttl=60*30)
+def _f(idd, ppage):
+    print("..._f")
+    url = "https://api.producthunt.com/v1/posts/{}/votes?page={}"
+    r = requests.get(url.format(idd,ppage), headers=h)
+    return r.json()
 
 def votes(id,uid):
     l = []
@@ -38,9 +52,7 @@ def votes(id,uid):
     count = 0
     percent_total = post_vote_count(id)
     while True:
-        url = "https://api.producthunt.com/v1/posts/{}/votes?page={}"
-        r = requests.get(url.format(id,page), headers=h)
-        response = r.json()
+        response = _f(id,page)
         page += 1
         if not response.get("votes"):
             break
@@ -52,20 +64,20 @@ def votes(id,uid):
             if is_maker:
                 l.append(dict(username=username, image=image, name=name, is_maker=is_maker))
             count += 1
-            cache.set(uid, count/percent_total*100)
+            percent = count/percent_total*100
+            print("percent {} for {} :: {}>{} {} {}".format(percent, id,uid, cache.get(uid), percent_total, count))
+            cache.set(uid, percent)
     return count, l
+
 
 def search(url_search, uid):
     import re
-    exists = cache.get(url_search)
-    if not exists is None:
-        return exists
-    else:
-        content = requests.get(url_search).text
-        resp = re.search('producthunt\:\/\/post\/(?P<id>[0-9]+)', content)
-        if resp:
-            id =  resp.groupdict().get("id")
-            if id:
-                res=votes(id, uid)
-                cache.set(url_search, res, timeout=60*30)
-                return res
+
+    content = requests.get(url_search).text
+    resp = re.search('producthunt\:\/\/post\/(?P<id>[0-9]+)', content)
+    if resp:
+        id =  resp.groupdict().get("id")
+        if id:
+            log.info("votes for project id: {}".format(id))
+            res=votes(id, uid)
+            return res
