@@ -69,8 +69,10 @@ def status(request):
                 context["votes"]  = dict(total=res[0], result=res[1])
 
     context["stat"] = get_statistics()
-    return render(request, "votes.html", context)
-
+    response = render(request, "votes.html", context)
+    if "votes" in context:
+        response["X-IC-CancelPolling"] = "true"
+    return response
 
 @route('', name='home')
 def homepage(request):
