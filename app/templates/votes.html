@@ -14,12 +14,21 @@
 
 {% if votes %}
 
-<div class="content">
+<div class="content ">
     <p>
-        {{url}}
+        {{url}} 
     </p>
+    <p class="is-size-4 has-text-weight-bold is-family-secondary	">
+    {{votes.result|length}} out of {{votes.total}}  upvoters are from Makerlog.
+    </p>
+</div>
 
-    {{votes.result|length}} out of {{votes.total}} upvoters are from Makerlog.
+<div class="content">
+
+<p class="is-size-3">
+  {% widthratio votes.result|length   votes.total 100 %}  %
+</p>
+ 
 </div>
 
 <div class="content">
