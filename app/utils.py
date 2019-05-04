@@ -14,7 +14,7 @@ def check_maker(username):
         flag = False
         if r.status_code == requests.codes.ok:
             flag = True
-        cache.set("m::{}".format(username), flag, timeout=60*60*24)
+        cache.set("m::{}".format(username), flag, timeout=60*60*24*7)
         return flag
     else:
         return exists
