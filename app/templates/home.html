@@ -2,7 +2,7 @@
 {% load widget_tweaks %}
 {% block content %}
 
-<div class="hero is-large is-primary is-bold">
+<div class="hero is-large is-primary is-bold is-fullheight">
 
 
     <div class="hero-body">
@@ -42,9 +42,9 @@
             </div>
             <div class="columns">
                 <div class="column is-6 is-offset-3">
-                <div id="votes" ic-poll="2s" ic-src="{% url 'status' %}">  
-                    {% include "votes.html" %}            
-                </div>
+                    <div style=""  ic-replace-target="true" id="votes" ic-poll="2s" ic-src="{% url 'status' %}">  
+                        {% include "votes.html" %}            
+                    </div>
                 </div>
             </div>
         </div>
