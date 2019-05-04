@@ -14,7 +14,7 @@
 
 {% if votes %}
 
-<div>
+<div class="content">
     <p>
         {{url}}
     </p>
@@ -22,7 +22,7 @@
     {{votes.result|length}} out of {{votes.total}} upvoters are from Makerlog.
 </div>
 
-<div>
+<div class="content">
     
     {% for v in votes.result %}
          <img src="{{v.image}}" alt="">

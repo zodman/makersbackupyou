@@ -6,16 +6,30 @@ h = {
 }
 
 def check_maker(username):
-    url = "https://api.getmakerlog.com/users/{}/"
-    r = requests.get(url.format(username))
-    if r.status_code == requests.codes.ok:
-        return True
-    return False
-
+    exists = cache.get("m::{}".format(username))
+    if exists is None:
+    
+        url = "https://api.getmakerlog.com/users/{}/"
+        r = requests.get(url.format(username))
+        flag = False
+        if r.status_code == requests.codes.ok:
+            flag = True
+        cache.set("m::{}".format(username), flag, timeout=60*60*24)
+        return flag
+    else:
+        return exists
+    
 def post_vote_count(id):
-    url = "https://api.producthunt.com/v1/posts/{}"
-    r = requests.get(url.format(id), headers=h)
-    return r.json().get("post").get("votes_count")
+    exists = cache.get("m::{}".format(id))
+    if exists is None:
+        url = "https://api.producthunt.com/v1/posts/{}"
+        r = requests.get(url.format(id), headers=h)
+        resp = r.json().get("post").get("votes_count")
+        cache.get("m::{}".format(id), resp)
+        return resp
+    else:
+        return exists
+
 
 
 def votes(id,uid):
@@ -43,9 +57,15 @@ def votes(id,uid):
 
 def search(url_search, uid):
     import re
-    content = requests.get(url_search).text
-    resp = re.search('producthunt\:\/\/post\/(?P<id>[0-9]+)', content)
-    if resp:
-        id =  resp.groupdict().get("id")
-        if id:
-            return votes(id, uid)
+    exists = cache.get(url_search)
+    if not exists is None:
+        return exists
+    else:
+        content = requests.get(url_search).text
+        resp = re.search('producthunt\:\/\/post\/(?P<id>[0-9]+)', content)
+        if resp:
+            id =  resp.groupdict().get("id")
+            if id:
+                res=votes(id, uid)
+                cache.set(url_search, res, timeout=60*30)
+                return res

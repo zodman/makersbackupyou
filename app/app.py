@@ -57,13 +57,13 @@ def status(request):
             context["url"] = job.args[0]
         except rq.exceptions.NoSuchJobError:
             pass
-
         context["status"] = status
         percent = cache.get(request.session.get("uid", 0))
         context["percent"] = percent
         if status == "finished":
             res = job.result
-            context["votes"]  = dict(total=res[0], result=res[1])
+            if res:
+                context["votes"]  = dict(total=res[0], result=res[1])
 
     context["stat"] = get_statistics()
     return render(request, "votes.html", context)
