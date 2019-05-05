@@ -17,6 +17,7 @@ def _fetch_all_users():
         url = "https://api.getmakerlog.com/users/?limit=5000"
         r = requests.get(url)
         json_r = r.json()
+        #print(json_r)
         cache.set("::fetch..", json_r)
         return json_r
     else:
@@ -49,8 +50,10 @@ def _f(idd, ppage):
 def votes(id,uid):
     l = []
     page = 1
-    count = 0
+    count = 20
+
     percent_total = post_vote_count(id)
+    cache.set(uid, 15)
     while True:
         response = _f(id,page)
         page += 1
@@ -64,16 +67,18 @@ def votes(id,uid):
             if is_maker:
                 l.append(dict(username=username, image=image, name=name, is_maker=is_maker))
             count += 1
-            percent = count/percent_total*100
-            print("percent {} for {} :: {}>{} {} {}".format(percent, id,uid, cache.get(uid), percent_total, count))
+            percent = count/(percent_total-20)*100
+            #print("percent {} for {} :: {}>{} {} {}".format(percent, id,uid, cache.get(uid), percent_total, count))
             cache.set(uid, percent)
     return count, l
 
 
 def search(url_search, uid):
     import re
+    cache.set(uid, 5)
 
     content = requests.get(url_search).text
+    cache.set(uid, 10)
     resp = re.search('producthunt\:\/\/post\/(?P<id>[0-9]+)', content)
     if resp:
         id =  resp.groupdict().get("id")

@@ -1,5 +1,9 @@
-{% if percent > 0 and status and  status != "finished" %}
+{% if status == "queued" %}
+    wait ... you are on queue
+    <i id="demo-spinner" class="fa fa-spinner fa-spin" ></i> 
+{% endif %}
 
+{% if percent > 0 and status and  status != "finished" %}
 <div>
     <progress class="progress" {% if percent > 0 %} value="{{percent|floatformat:0}}" {% endif %} max="100">
     {{percent|floatformat:0}} %
@@ -39,12 +43,9 @@
 
 </div>
 
-
 {% endif %}
 
 {% if status != "finished" %}
-
-
 <div class="is-size-7 has-text-grey-lighter	">
 
     {% for q in stat.queues  %}

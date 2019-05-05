@@ -43,6 +43,9 @@
             <div class="columns">
                 <div class="column is-6 is-offset-3">
                     <div style=""  id="votes" ic-poll="2s" ic-src="{% url 'status' %}">  
+                        {% if msg %}
+                            <i id="demo-spinner" class="fa fa-spinner fa-spin" ></i> 
+                        {% endif %}
                         {% include "votes.html" %}            
                     </div>
                 </div>
