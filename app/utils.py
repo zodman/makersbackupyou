@@ -50,7 +50,7 @@ def _f(idd, ppage):
 def votes(id,uid):
     l = []
     page = 1
-    count = 20
+    count = 0
 
     percent_total = post_vote_count(id)
     cache.set(uid, 15)
